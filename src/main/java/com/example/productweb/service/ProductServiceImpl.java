@@ -11,8 +11,11 @@ public class ProductServiceImpl implements ProductService{
     private ArrayList<Product> list = new ArrayList<>();
     @Override
     public Product create(Product product) {
-        list.add(product);
-        return product;
+        if(findById(product.getProductID())==null){
+            list.add(product);
+            return product;
+        }
+        return null;
     }
 
     @Override
