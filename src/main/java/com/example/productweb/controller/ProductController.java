@@ -39,7 +39,7 @@ public class ProductController {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public Product findById(@PathVariable("idProduct") String id){
+    public Product findById(@PathVariable("idProduct") Long id){
         return productService.findById(id);
     }
     @RequestMapping(
@@ -65,7 +65,7 @@ public class ProductController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    public Product delete(@PathVariable("idProduct") String id){
+    public Product delete(@PathVariable("idProduct") Long id){
         return productService.delete(id);
     }
 

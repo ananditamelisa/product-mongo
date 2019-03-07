@@ -1,53 +1,60 @@
 package com.example.productweb.service;
 
 import com.example.productweb.Product;
+import com.example.productweb.repository.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class ProductServiceImpl implements ProductService{
+
+    @Autowired
+    private ProductRepository productRepository;
+
     private ArrayList<Product> list = new ArrayList<>();
     @Override
     public Product create(Product product) {
-        if(findById(product.getProductID())==null){
-            list.add(product);
-            return product;
-        }
-        return null;
+        return productRepository.save(product);
     }
 
     @Override
-    public Product findById(String id) {
-        for(int i=0; i<list.size(); i++){
-            if(list.get(i).getProductID().equals(id)){
-                return list.get(i);
-            }
+    public Product findById(Long id) {
+        Optional<Product> byId = productRepository.findById(id);
+        if(byId.isPresent()){
+            return byId.get();
+        }else{
+            return null;
         }
-        return null;
     }
 
     @Override
     public List<Product> findAll() {
-        return list;
+        return productRepository.findAll();
     }
 
     @Override
     public Product update(Product product) {
-        Product temp = findById(product.getProductID());
-        if(temp==null) return null;
-        list.set(list.indexOf(temp), product);
-        return product;
+        Optional<Product> byId = productRepository.findById(product.getProductID());
+        if(byId.isPresent()){
+            return productRepository.save(product);
+        }else{
+            return null;
+        }
     }
 
     @Override
-    public Product delete(String id) {
-        Product pr = findById(id);
-        if(pr==null){
+    public Product delete(Long id) {
+        Optional<Product> byId = productRepository.findById(id);
+        if(byId.isPresent()){
+            Product p = byId.get();
+            productRepository.delete(byId.get());
+            return p;
+        }else{
             return null;
         }
-        list.remove(findById(id));
-        return pr;
     }
 }
